@@ -90,10 +90,10 @@ def predict_fare():
 @app.route("/set_model", methods=["GET", "POST"])
 def set_model():
     inputs = request.get_json()
-    model_dir = inputs["model_directory"]
-    pipeline_def["pipeline"] = download_model(model_directory=model_dir, rm=True)
+    estimator = inputs["estimator"]
+    pipeline_def["pipeline"] = download_model(estimator=estimator, rm=True)
     pipeline_def["from_gcp"] = True
-    return {"reponse": f"correctly got model from {model_dir} directory on GCP"}
+    return {"reponse": f"correctly got model from {estimator} directory on GCP"}
 
 
 if __name__ == "__main__":

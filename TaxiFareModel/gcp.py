@@ -37,17 +37,21 @@ def storage_upload(model_version=MODEL_VERSION, bucket=BUCKET_NAME, rm=False):
         os.remove("model.joblib")
 
 
-def download_model(model_version=MODEL_VERSION, bucket=BUCKET_NAME, rm=True):
+def download_model(model_version=MODEL_VERSION, bucket=BUCKET_NAME, rm=True, estimator="model"):
     creds = get_credentials()
     client = storage.Client(credentials=creds, project=PROJECT_ID).bucket(bucket)
 
-    storage_location = "models/{}/versions/{}/{}".format(
-        MODEL_NAME, model_version, "model.joblib"
+    storage_location = "models/{}/versions/{}/{}.joblib".format(
+        MODEL_NAME, model_version, estimator
     )
     blob = client.blob(storage_location)
-    blob.download_to_filename("model.joblib")
-    print(f"=> pipeline downloaded from storage")
-    model = joblib.load("model.joblib")
+    blob.download_to_filename("{}.joblib".format(estimator))
+    print("{}.joblib downloaded".format(estimator))
+    model = joblib.load("{}.joblib".format(estimator))
     if rm:
-        os.remove("model.joblib")
+        os.remove("{}.joblib".format(estimator))
     return model
+
+if __name__ == '__main__':
+    print(get_credentials())
+    download_model(estimator = 'xgboost')
