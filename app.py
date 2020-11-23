@@ -91,7 +91,7 @@ def predict_fare():
 def set_model():
     inputs = request.get_json()
     estimator = inputs["estimator"]
-    pipeline_def["pipeline"] = download_model(estimator=estimator, rm=True)
+    pipeline_def["pipeline"] = download_model(estimator="xgboost", rm=True)
     pipeline_def["from_gcp"] = True
     return {"reponse": f"correctly got model from {estimator} directory on GCP"}
 
